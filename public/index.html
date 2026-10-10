@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TempatBelajar by Edra - Platform EdTech AI</title>
+  
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- SIDEBAR NAVIGASI & RIWAYAT -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">👑</div>
+        <h2>TempatBelajar <span>by Edra</span></h2>
+      </div>
+
+      <button class="new-chat-btn" id="newChatBtn">
+        <i class="fa-solid fa-plus"></i> Chat Baru
+      </button>
+
+      <button class="live-voice-start-btn" id="startLiveVoiceBtn">
+        <i class="fa-solid fa-headset"></i> Mode Aurelia Live Voice
+      </button>
+
+      <!-- USER & AURELIA AVATAR (BISA UPLOAD MANUALLY) -->
+      <div class="user-card">
+        <div class="avatar-badge" id="avatarBadgeContainer" title="Klik untuk ganti foto Aurelia">
+          <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" alt="Aurelia Avatar" id="aureliaAvatarImg" />
+          <div class="avatar-overlay"><i class="fa-solid fa-camera"></i></div>
+        </div>
+        <input type="file" id="aureliaAvatarInput" accept="image/*" style="display: none;" />
+        <div class="user-info">
+          <h3>Aurelia AI ✨</h3>
+          <p class="rank-tag"><i class="fa-solid fa-crown"></i> Gold, Glory, Power</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-btn active" data-tab="chat"><i class="fa-solid fa-comments"></i> Tanya Aurelia AI</button>
+        <button class="nav-btn" data-tab="modul"><i class="fa-solid fa-book-open"></i> Modul Belajar (TK-Kuliah)</button>
+        <button class="nav-btn" data-tab="profil"><i class="fa-solid fa-user-astronaut"></i> Profil Maestro Edra</button>
+      </nav>
+
+      <div class="chat-history-container">
+        <h4><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Obrolan</h4>
+        <div class="chat-history-list" id="chatHistoryList"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <p class="creator-tag">Diciptakan oleh <b>Edra Muhammad Syauqi Ramadhan</b></p>
+      </div>
+    </aside>
+
+    <!-- AREA UTAMA -->
+    <main class="main-content">
+      
+      <!-- TAB CHAT & CANVAS -->
+      <section class="tab-section active" id="chatTab">
+        <div class="workspace-grid">
+          
+          <div class="chat-wrapper">
+            <header class="chat-header">
+              <div class="mascot-info">
+                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" class="mascot-img aurelia-dynamic-img" alt="Aurelia Avatar" />
+                <div>
+                  <h2>Aurelia <span>(Aurelia-G3)</span></h2>
+                  <p>Asisten Belajar Anime Imut & Super Cerdas Ciptaan Edra</p>
+                </div>
+              </div>
+              <button class="live-btn-header" id="headerLiveBtn">
+                <i class="fa-solid fa-bolt"></i> Live Voice
+              </button>
+            </header>
+
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="file-preview-bar" id="filePreviewBar" style="display: none;">
+              <span id="fileNameDisplay"><i class="fa-solid fa-file"></i> namafile.png</span>
+              <button id="removeFileBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form class="chat-input-area" id="chatForm">
+              <label for="fileInput" class="upload-btn" title="Upload Foto Soal atau File PDF">
+                <i class="fa-solid fa-paperclip"></i>
+              </label>
+              <input type="file" id="fileInput" accept="image/*,application/pdf" style="display: none;" />
+              
+              <input type="text" id="userInput" placeholder="Tanyakan materi, buatkan gambar, atau upload file..." autocomplete="off" />
+              <button type="submit" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+          </div>
+
+          <!-- WHITEBOARD CANVAS INTERAKTIF -->
+          <div class="canvas-wrapper">
+            <header class="canvas-header">
+              <h3><i class="fa-solid fa-pen-ruler"></i> Interactive Whiteboard</h3>
+              <div class="canvas-tools">
+                <input type="color" id="penColor" value="#f59e0b" title="Pilih Warna Kuas" />
+                <button id="clearCanvasBtn" class="tool-btn"><i class="fa-solid fa-trash-can"></i> Bersihkan</button>
+              </div>
+            </header>
+            
+            <div class="canvas-container">
+              <div id="aiSummaryCard" class="ai-summary-card" style="display: none;"></div>
+              <canvas id="paintCanvas"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB MODUL BELAJAR LENGKAP (TK - KULIAH) -->
+      <section class="tab-section" id="modulTab">
+        <div class="content-card">
+          <h2>📚 Modul Pembelajaran Kompleks & Multi-Jenjang</h2>
+          <p class="subtitle">Koleksi materi lengkap dari jenjang Dasar hingga Perguruan Tinggi.</p>
+
+          <!-- JENJANG TK / PAUD -->
+          <div class="modul-level-group">
+            <h3><i class="fa-solid fa-shapes"></i> Jenjang PAUD & TK</h3>
+            <div class="modul-grid">
+              <div class="modul-card" onclick="askModul('Pendidikan Anak Dini Usia: Mengenal Angka, Huruf, Warna, dan Pola Dasar')">
+                <div class="card-icon">🎨</div>
+                <h3>Mengenal Angka & Warna</h3>
+                <p>Belajar membaca, berhitung sederhana, dan mengenal warna visual.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('Motorik Halus dan Kasar: Pengenalan Lingkungan & Motorik Anak')">
+                <div class="card-icon">🧩</div>
+                <h3>Motorik & Lingkungan</h3>
+                <p>Pengembangan kreativitas, bentuk benda, dan emosi dasar.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- JENJANG SD / MI -->
+          <div class="modul-level-group">
+            <h3><i class="fa-solid fa-child"></i> Jenjang Sekolah Dasar (SD / MI)</h3>
+            <div class="modul-grid">
+              <div class="modul-card" onclick="askModul('Matematika SD: Operasi Hitung Dasar, Pecahan, Bangun Datar & Ruang')">
+                <div class="card-icon">🔢</div>
+                <h3>Matematika SD</h3>
+                <p>Perkalian, pembagian, pecahan, desimal, dan keliling/luas.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('IPAS SD: Sains IPA dan Ilmu Pengetahuan Sosial Dasar')">
+                <div class="card-icon">🌱</div>
+                <h3>IPAS Dasar</h3>
+                <p>Ekosistem, siklus air, energi, dan sejarah Nusantara.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('Bahasa Indonesia & Bahasa Inggris Dasar SD')">
+                <div class="card-icon">📖</div>
+                <h3>Literasi & Bahasa</h3>
+                <p>Tata bahasa, membaca pemahaman, dan kosakata Bahasa Inggris.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- JENJANG SMP / MTs -->
+          <div class="modul-level-group">
+            <h3><i class="fa-solid fa-graduation-cap"></i> Jenjang SMP / MTs</h3>
+            <div class="modul-grid">
+              <div class="modul-card" onclick="askModul('Matematika SMP: Aljabar, Persamaan Kuadrat, & Geometri Vektor')">
+                <div class="card-icon">📐</div>
+                <h3>Matematika & Aljabar</h3>
+                <p>Persamaan linear, phytagoras, statistika, dan peluang.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('IPA Terpadu SMP: Fisika Mekanika Dasar, Biologi Sel, & Kimia Zat')">
+                <div class="card-icon">🔬</div>
+                <h3>IPA Terpadu</h3>
+                <p>Gaya dan gerak, zat asam-basa, sistem organ manusia, dan listrik.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('IPS SMP: Geografi, Sejarah Dunia & Indonesia, serta Ekonomi Dasar')">
+                <div class="card-icon">🌍</div>
+                <h3>IPS & Ekonomi Dasar</h3>
+                <p>Peta, dinamika penduduk, lembaga sosial, dan kegiatan ekonomi.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- JENJANG SMA / SMK / MA -->
+          <div class="modul-level-group">
+            <h3><i class="fa-solid fa-school"></i> Jenjang SMA / SMK / MA</h3>
+            <div class="modul-grid">
+              <div class="modul-card" onclick="askModul('Matematika Tingkat Lanjut SMA: Kalkulus, Trigonometri Kompleks, & Matriks')">
+                <div class="card-icon">♾️</div>
+                <h3>Kalkulus & Matriks SMA</h3>
+                <p>Turunan, integral, limit fungsi, matriks, dan turunan trigonometri.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('Fisika SMA: Mekanika Klasik Newton, Termodinamika, & Fisika Gelombang')">
+                <div class="card-icon">⚡</div>
+                <h3>Fisika Lanjutan</h3>
+                <p>Hukum Newton, fluida, Gelombang Elektromagnetik, & Optik.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('Ekonomi SMA & Persiapan Olimpiade Ekonomi OESN: Mikro, Makro, dan Akuntansi')">
+                <div class="card-icon">📈</div>
+                <h3>Ekonomi & OESN</h3>
+                <p>Permintaan-penawaran, kebijakan moneter, pasar modal, & jurnal akuntansi.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- JENJANG KULIAH / PERGURUAN TINGGI -->
+          <div class="modul-level-group">
+            <h3><i class="fa-solid fa-university"></i> Jenjang Perguruan Tinggi (Kuliah)</h3>
+            <div class="modul-grid">
+              <div class="modul-card" onclick="askModul('Kalkulus Peubah Banyak dan Persamaan Diferensial Biasa')">
+                <div class="card-icon">📊</div>
+                <h3>Kalkulus Vektor & Diferensial</h3>
+                <p>Integral lipat, analisis vektor, persamaan diferensial lanjutan.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('Artificial Intelligence, Machine Learning, & Pemrograman Node.js Modern')">
+                <div class="card-icon">💻</div>
+                <h3>Kecerdasan Buatan & AI</h3>
+                <p>Neural networks, LLM architecture, Machine Learning, dan Node.js.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+              <div class="modul-card" onclick="askModul('Manajemen Keuangan Perusahaan & Pasar Keuangan OJK Lanjutan')">
+                <div class="card-icon">🏛️</div>
+                <h3>Keuangan & Manajemen OJK</h3>
+                <p>Valuasi aset, manajemen risiko finansial, dan analisa regulasi keuangan.</p>
+                <button class="action-btn">Pelajari Bersama Aurelia</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB PROFIL EDRA (PENGGANTI KUIS INTERAKTIF) -->
+      <section class="tab-section" id="profilTab">
+        <div class="content-card profile-card-wrapper">
+          <div class="profile-header-banner">
+            <div class="profile-avatar-large">👨‍💻</div>
+            <div class="profile-header-text">
+              <h2>Edra Muhammad Syauqi Ramadhan</h2>
+              <p class="profile-title"><i class="fa-solid fa-crown"></i> Maestro & Pencipta Utama TempatBelajar & Aurelia AI</p>
+            </div>
+          </div>
+
+          <div class="profile-details-grid">
+            <div class="detail-box">
+              <h3><i class="fa-solid fa-lightbulb"></i> Visi & Mastermind</h3>
+              <p>
+                <b>Edra Muhammad Syauqi Ramadhan</b> adalah sosok visioner di balik pengembangan platform <b>TempatBelajar</b> dan arsitektur kecerdasan buatan <b>Aurelia AI</b>. Dengan prinsip kejayaan <i>Gold, Glory, & Power</i>, Edra merancang sistem pembelajaran modern yang memadukan komputasi AI mutakhir dengan kemudahan pendidikan interaktif.
+              </p>
+            </div>
+
+            <div class="detail-box">
+              <h3><i class="fa-solid fa-trophy"></i> Proyek & Inisiatif Strategis</h3>
+              <ul class="project-list">
+                <li><b>OESN 2025/2026</b> — Penggagas & pengembang proyek Olimpiade Ekonomi Siswa Nasional.</li>
+                <li><b>ISFO 2026</b> — Inisiator dalam proyek olimpiade dan kegiatan akademis nasional ISFO.</li>
+                <li><b>Hour of Code (AI ASEAN)</b> — Pemrakarsa inisiatif pembelajaran edukasi AI tingkat regional ASEAN.</li>
+                <li><b>Seri Literasi Keuangan OJK</b> — Pengembang modul dan materi edukasi keuangan berkolaborasi dengan standar literasi keuangan terpadu.</li>
+              </ul>
+            </div>
+
+            <div class="detail-box full-width">
+              <h3><i class="fa-solid fa-compass"></i> Filosofi Pengembangan (Gold, Glory, Power)</h3>
+              <div class="philosophy-grid">
+                <div class="ph-item">
+                  <h4>Gold</h4>
+                  <p>Kemurnian pemahaman akademis dan standar ilmu pengetahuan tertinggi di setiap jenjang.</p>
+                </div>
+                <div class="ph-item">
+                  <h4>Glory</h4>
+                  <p>Kehormatan dan kejayaan hasil belajar murid melalui integrasi teknologi kecerdasan buatan.</p>
+                </div>
+                <div class="ph-item">
+                  <h4>Power</h4>
+                  <p>Kekuatan analisis logika, komputasi presisi, dan daya saing ilmu pengetahuan tanpa batas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- OVERLAY AURELIA LIVE VOICE MODE -->
+  <div class="live-voice-overlay" id="liveVoiceOverlay">
+    <div class="live-card">
+      <button class="close-live-btn" id="closeLiveBtn"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="live-avatar-wrapper">
+        <div class="pulse-ring r1"></div>
+        <div class="pulse-ring r2"></div>
+        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80" alt="Aurelia Live Avatar" class="live-avatar aurelia-dynamic-img" />
+      </div>
+
+      <h2 class="live-title">Aurelia Live Voice</h2>
+      <p class="live-status" id="liveStatusText">Aurelia siap mendengarkan... Bicara saja!</p>
+
+      <div class="voice-wave" id="voiceWave">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="live-subtitle-box" id="liveSubtitleBox">
+        <i>"Halo Kak! Silakan bicara panjang lebar dengan Aurelia..."</i>
+      </div>
+
+      <button class="end-call-btn" id="endCallBtn">
+        <i class="fa-solid fa-phone-slash"></i> Akhiri Obrolan Live
+      </button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
