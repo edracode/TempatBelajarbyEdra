@@ -33,6 +33,14 @@ const endCallBtn = document.getElementById('endCallBtn');
 const liveStatusText = document.getElementById('liveStatusText');
 const liveSubtitleBox = document.getElementById('liveSubtitleBox');
 
+// ELEMEN HANDLER RESPONSIF SMARTPHONE / HP
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+const sidebar = document.getElementById('sidebar');
+const mobileSidebarOverlay = document.getElementById('mobileSidebarOverlay');
+const mobileWhiteboardToggle = document.getElementById('mobileWhiteboardToggle');
+const canvasWrapper = document.getElementById('canvasWrapper');
+
 let chats = JSON.parse(localStorage.getItem('edra_chats')) || [];
 let activeChatId = localStorage.getItem('edra_active_chat_id') || null;
 let selectedFile = null;
@@ -41,7 +49,29 @@ let recognition = null;
 let fullTranscript = '';
 let speechSilenceTimer = null;
 
-// 1. PENGATURAN FOTO PROFIL CUSTOM AURELIA (MANUAL UPLOAD)
+// 1. HANDLER NAVIGASI RESPONSIF LAYAR HP
+if (mobileMenuBtn && sidebar && mobileSidebarOverlay) {
+  mobileMenuBtn.addEventListener('click', () => {
+    sidebar.classList.add('mobile-open');
+    mobileSidebarOverlay.classList.add('active');
+  });
+
+  const closeMenu = () => {
+    sidebar.classList.remove('mobile-open');
+    mobileSidebarOverlay.classList.remove('active');
+  };
+
+  if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeMenu);
+  mobileSidebarOverlay.addEventListener('click', closeMenu);
+}
+
+if (mobileWhiteboardToggle && canvasWrapper) {
+  mobileWhiteboardToggle.addEventListener('click', () => {
+    canvasWrapper.classList.toggle('mobile-show');
+  });
+}
+
+// 2. PENGATURAN FOTO PROFIL CUSTOM AURELIA (MANUAL UPLOAD)
 const customAvatar = localStorage.getItem('edra_aurelia_avatar');
 if (customAvatar) {
   updateAvatarImages(customAvatar);
@@ -68,7 +98,7 @@ function updateAvatarImages(url) {
   });
 }
 
-// 2. NAVIGASI TAB MENU (CHAT, MODUL, PROFIL EDRA)
+// 3. NAVIGASI TAB MENU (CHAT, MODUL, PROFIL EDRA)
 navBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     const targetTab = btn.getAttribute('data-tab');
@@ -77,10 +107,16 @@ navBtns.forEach(btn => {
     btn.classList.add('active');
     const activeSection = document.getElementById(`${targetTab}Tab`);
     if (activeSection) activeSection.classList.add('active');
+
+    // Tutup sidebar di HP saat tab dipilih
+    if (sidebar && sidebar.classList.contains('mobile-open')) {
+      sidebar.classList.remove('mobile-open');
+      if (mobileSidebarOverlay) mobileSidebarOverlay.classList.remove('active');
+    }
   });
 });
 
-// 3. FITUR HENTIKAN/POTONG PEMBICARAAN AI (BARGE-IN)
+// 4. FITUR HENTIKAN/POTONG PEMBICARAAN AI (BARGE-IN)
 function stopAureliaSpeaking() {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -89,16 +125,16 @@ function stopAureliaSpeaking() {
 
 function speakAurelia(text, onCompleteCallback) {
   if ('speechSynthesis' in window) {
-    stopAureliaSpeaking(); // Hentikan ucapan lama sebelum memulai yang baru
+    stopAureliaSpeaking();
 
     let cleanText = text.replace(/\[CANVAS:[\s\S]*?\]/g, '')
-                        .replace(/!\[.*?\]\(.*?\)/g, '') // Hapus sintaks gambar dari pembacaan suara
+                        .replace(/!\[.*?\]\(.*?\)/g, '')
                         .replace(/[*#_`$~\\]/g, '')
                         .trim();
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'id-ID';
-    utterance.pitch = 1.6; // Pitch imut anime
+    utterance.pitch = 1.6;
     utterance.rate = 1.1;
 
     utterance.onend = () => { if (onCompleteCallback) onCompleteCallback(); };
@@ -110,7 +146,7 @@ function speakAurelia(text, onCompleteCallback) {
   }
 }
 
-// 4. LOGIKA SPEECH RECOGNITION (DENGAN PENANGKAPAN UCAPAN PANJANG & INTERRUPT)
+// 5. LOGIKA SPEECH RECOGNITION (UCAPAN PANJANG & INTERRUPT BARGE-IN)
 function initLiveSpeech() {
   if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
     alert('Browser Anda belum mendukung Speech Recognition. Gunakan Google Chrome atau Microsoft Edge.');
@@ -120,11 +156,10 @@ function initLiveSpeech() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SpeechRecognition();
   recognition.lang = 'id-ID';
-  recognition.continuous = true;     // PERBAIKAN: Memungkinkan bicara panjang lebar tanpa terputus
-  recognition.interimResults = true;  // PERBAIKAN: Menangkap hasil sementara secara real-time
+  recognition.continuous = true;
+  recognition.interimResults = true;
 
   recognition.onspeechstart = () => {
-    // PERBAIKAN: MEMOTONG PEMBICARAAN AURELIA SAAT PENGGUNA MULAI BICARA
     stopAureliaSpeaking();
     if (isLiveActive) {
       liveStatusText.textContent = "Aurelia sedang mendengarkan suaramu... ✨";
@@ -134,7 +169,6 @@ function initLiveSpeech() {
   recognition.onresult = (event) => {
     if (!isLiveActive) return;
 
-    // Hentikan suara AI jika masih menyala saat ada masukan suara pengguna
     stopAureliaSpeaking();
 
     let interimTranscript = '';
@@ -157,7 +191,6 @@ function initLiveSpeech() {
       liveSubtitleBox.innerHTML = `<b>Anda:</b> "${currentDisplay}"`;
     }
 
-    // Timer jeda untuk memastikan pengiriman hanya dilakukan ketika pengguna selesai bicara
     clearTimeout(speechSilenceTimer);
     speechSilenceTimer = setTimeout(() => {
       const textToSend = (fullTranscript + ' ' + interimTranscript).trim();
@@ -165,7 +198,7 @@ function initLiveSpeech() {
         fullTranscript = '';
         processLiveVoiceInput(textToSend);
       }
-    }, 1800); // Menunggu 1.8 detik hening sebelum memproses
+    }, 1800);
   };
 
   recognition.onerror = () => {
@@ -254,7 +287,7 @@ if (headerLiveBtn) headerLiveBtn.addEventListener('click', startLiveVoiceMode);
 if (closeLiveBtn) closeLiveBtn.addEventListener('click', stopLiveVoiceMode);
 if (endCallBtn) endCallBtn.addEventListener('click', stopLiveVoiceMode);
 
-// 5. LOGIKA MANAJEMEN RIWAYAT CHAT (LOCAL STORAGE)
+// 6. MANAJEMEN RIWAYAT CHAT (LOCAL STORAGE)
 function saveChatsToStorage() {
   localStorage.setItem('edra_chats', JSON.stringify(chats));
   localStorage.setItem('edra_active_chat_id', activeChatId);
@@ -343,7 +376,7 @@ function loadActiveChatMessages() {
 
 if (newChatBtn) newChatBtn.addEventListener('click', createNewChat);
 
-// 6. CHAT BUBBLE, RENDER GAMBAR AI & KATEX MATH
+// 7. CHAT BUBBLE, RENDER GAMBAR AI & KATEX MATH
 function renderMessageBubble(sender, text) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message', sender);
@@ -406,7 +439,7 @@ function updateCanvas(text) {
   }
 }
 
-// 7. SUBMIT CHAT TEKS
+// 8. SUBMIT CHAT TEKS
 if (chatForm) {
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -468,7 +501,7 @@ if (chatForm) {
   });
 }
 
-// 8. DRAWING CANVAS WHITEBOARD
+// 9. DRAWING CANVAS WHITEBOARD
 if (paintCanvas) {
   function resizeCanvas() {
     paintCanvas.width = paintCanvas.parentElement.clientWidth;
@@ -483,7 +516,7 @@ if (paintCanvas) {
   paintCanvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
   paintCanvas.addEventListener('mousemove', draw);
 
-  paintCanvas.addEventListener('touchstart', (e) => { drawing = true; draw(e); });
+  paintCanvas.addEventListener('touchstart', (e) => { drawing = true; draw(e.touches[0]); });
   paintCanvas.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
   paintCanvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); });
 
