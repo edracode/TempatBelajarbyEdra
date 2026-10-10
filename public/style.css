@@ -23,13 +23,56 @@ body {
   overflow: hidden;
 }
 
+/* HEADER KHUSUS HP (DESKTOP HIDDEN) */
+.mobile-top-bar {
+  display: none;
+  height: 56px;
+  background: #0f172a;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 16px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+
+.mobile-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--gold-glow);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.close-sidebar-mobile {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.mobile-sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+}
+
 .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR & NAVIGASI */
 .sidebar {
   width: 280px;
   min-width: 280px;
@@ -39,7 +82,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100vh;
+  height: 100%;
+  transition: transform 0.3s ease;
 }
 
 .brand {
@@ -48,9 +92,20 @@ body {
   gap: 10px;
 }
 
-.brand-icon { font-size: 1.6rem; }
-.brand h2 { font-size: 1.05rem; color: #fff; }
-.brand h2 span { color: var(--gold-primary); display: block; font-size: 0.75rem; }
+.brand-icon {
+  font-size: 1.6rem;
+}
+
+.brand h2 {
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.brand h2 span {
+  color: var(--gold-primary);
+  display: block;
+  font-size: 0.75rem;
+}
 
 .new-chat-btn {
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
@@ -67,7 +122,9 @@ body {
   transition: transform 0.2s;
 }
 
-.new-chat-btn:hover { transform: scale(1.02); }
+.new-chat-btn:hover {
+  transform: scale(1.02);
+}
 
 .live-voice-start-btn {
   background: linear-gradient(135deg, var(--gold-primary), var(--purple-royal));
@@ -85,9 +142,10 @@ body {
   transition: transform 0.2s;
 }
 
-.live-voice-start-btn:hover { transform: scale(1.02); }
+.live-voice-start-btn:hover {
+  transform: scale(1.02);
+}
 
-/* USER & AURELIA AVATAR (UPLOAD MANUAL) */
 .user-card {
   background: rgba(30, 41, 59, 0.6);
   border: 1px solid var(--border-color);
@@ -117,24 +175,39 @@ body {
 
 .avatar-overlay {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 0.8rem;
   opacity: 0;
   transition: opacity 0.2s;
-  border-radius: 50%;
 }
 
-.avatar-badge:hover .avatar-overlay { opacity: 1; }
+.avatar-badge:hover .avatar-overlay {
+  opacity: 1;
+}
 
-.user-info h3 { font-size: 0.85rem; color: #fff; }
-.rank-tag { font-size: 0.7rem; color: var(--gold-primary); font-weight: bold; }
+.user-info h3 {
+  font-size: 0.85rem;
+  color: #fff;
+}
 
-.nav-menu { display: flex; flex-direction: column; gap: 4px; }
+.rank-tag {
+  font-size: 0.7rem;
+  color: var(--gold-primary);
+  font-weight: bold;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
 .nav-btn {
   background: transparent;
@@ -151,7 +224,8 @@ body {
   transition: all 0.2s;
 }
 
-.nav-btn:hover, .nav-btn.active {
+.nav-btn:hover,
+.nav-btn.active {
   background: rgba(245, 158, 11, 0.15);
   color: var(--gold-glow);
   border-left: 3px solid var(--gold-primary);
@@ -164,7 +238,6 @@ body {
   flex-direction: column;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 8px;
-  margin-top: 2px;
 }
 
 .chat-history-container h4 {
@@ -198,7 +271,8 @@ body {
   align-items: center;
 }
 
-.history-item:hover, .history-item.active {
+.history-item:hover,
+.history-item.active {
   background: rgba(255, 255, 255, 0.06);
   color: var(--gold-glow);
 }
@@ -212,7 +286,9 @@ body {
   padding: 2px 4px;
 }
 
-.delete-chat-btn:hover { opacity: 1; }
+.delete-chat-btn:hover {
+  opacity: 1;
+}
 
 .sidebar-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -226,13 +302,15 @@ body {
   line-height: 1.3;
 }
 
-.creator-tag b { color: var(--gold-glow); }
+.creator-tag b {
+  color: var(--gold-glow);
+}
 
-/* ================= MAIN AREA ================= */
+/* AREA UTAMA */
 .main-content {
   flex: 1;
   padding: 16px;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -242,7 +320,9 @@ body {
   overflow-y: auto;
 }
 
-.tab-section.active { display: block; }
+.tab-section.active {
+  display: block;
+}
 
 .workspace-grid {
   display: grid;
@@ -270,7 +350,11 @@ body {
   align-items: center;
 }
 
-.mascot-info { display: flex; align-items: center; gap: 10px; }
+.mascot-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .mascot-img {
   width: 38px;
@@ -280,9 +364,19 @@ body {
   border: 2px solid var(--purple-royal);
 }
 
-.mascot-info h2 { font-size: 1rem; }
-.mascot-info h2 span { font-size: 0.75rem; color: var(--gold-primary); }
-.mascot-info p { font-size: 0.75rem; color: var(--text-muted); }
+.mascot-info h2 {
+  font-size: 1rem;
+}
+
+.mascot-info h2 span {
+  font-size: 0.75rem;
+  color: var(--gold-primary);
+}
+
+.mascot-info p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
 
 .live-btn-header {
   background: rgba(139, 92, 246, 0.2);
@@ -305,9 +399,19 @@ body {
   gap: 14px;
 }
 
-.message { display: flex; gap: 8px; align-items: flex-start; }
-.message.user { justify-content: flex-end; }
-.message.ai { justify-content: flex-start; }
+.message {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.ai {
+  justify-content: flex-start;
+}
 
 .avatar-small img {
   width: 30px;
@@ -317,7 +421,7 @@ body {
 }
 
 .bubble {
-  max-width: 82%;
+  max-width: 85%;
   padding: 12px 16px;
   border-radius: 12px;
   line-height: 1.6;
@@ -338,12 +442,10 @@ body {
   border-bottom-left-radius: 2px;
 }
 
-/* GAMBAR HASIL GENERATE AI DENGAN BUBBLE */
 .bubble img {
   max-width: 100%;
   border-radius: 10px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin: 8px 0;
   border: 1px solid var(--gold-primary);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
@@ -399,7 +501,7 @@ body {
   cursor: pointer;
 }
 
-/* ================= CANVAS ================= */
+/* WHITEBOARD CANVAS */
 .canvas-wrapper {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -419,10 +521,24 @@ body {
   align-items: center;
 }
 
-.canvas-header h3 { font-size: 0.85rem; color: var(--gold-glow); }
-.canvas-tools { display: flex; gap: 8px; align-items: center; }
+.canvas-header h3 {
+  font-size: 0.85rem;
+  color: var(--gold-glow);
+}
 
-#penColor { border: none; background: transparent; width: 26px; height: 26px; cursor: pointer; }
+.canvas-tools {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#penColor {
+  border: none;
+  background: transparent;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
 
 .tool-btn {
   background: rgba(239, 68, 68, 0.2);
@@ -443,7 +559,9 @@ body {
 
 .ai-summary-card {
   position: absolute;
-  top: 10px; left: 10px; right: 10px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
   background: rgba(15, 23, 42, 0.95);
   border: 1px solid var(--gold-primary);
   border-radius: 10px;
@@ -454,9 +572,13 @@ body {
   z-index: 5;
 }
 
-#paintCanvas { width: 100%; height: 100%; cursor: crosshair; }
+#paintCanvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
 
-/* ================= MODUL BELAJAR MULTI-JENJANG ================= */
+/* MODUL & PROFIL MAESTRO */
 .content-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -509,9 +631,20 @@ body {
   border-color: var(--gold-primary);
 }
 
-.card-icon { font-size: 1.5rem; }
-.modul-card h3 { font-size: 0.9rem; color: #fff; }
-.modul-card p { font-size: 0.78rem; color: var(--text-muted); flex: 1; }
+.card-icon {
+  font-size: 1.5rem;
+}
+
+.modul-card h3 {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.modul-card p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  flex: 1;
+}
 
 .action-btn {
   background: rgba(245, 158, 11, 0.2);
@@ -525,7 +658,6 @@ body {
   margin-top: 6px;
 }
 
-/* ================= TAB PROFIL MAESTRO EDRA ================= */
 .profile-card-wrapper {
   padding: 24px;
 }
@@ -612,7 +744,9 @@ body {
   line-height: 1.5;
 }
 
-.project-list li b { color: var(--gold-glow); }
+.project-list li b {
+  color: var(--gold-glow);
+}
 
 .philosophy-grid {
   display: grid;
@@ -639,10 +773,13 @@ body {
   color: var(--text-muted);
 }
 
-/* ================= LIVE VOICE OVERLAY ================= */
+/* OVERLAY AURELIA LIVE VOICE */
 .live-voice-overlay {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(11, 15, 25, 0.95);
   backdrop-filter: blur(16px);
   z-index: 9999;
@@ -651,7 +788,9 @@ body {
   justify-content: center;
 }
 
-.live-voice-overlay.active { display: flex; }
+.live-voice-overlay.active {
+  display: flex;
+}
 
 .live-card {
   background: rgba(30, 41, 59, 0.9);
@@ -670,7 +809,8 @@ body {
 
 .close-live-btn {
   position: absolute;
-  top: 16px; right: 16px;
+  top: 16px;
+  right: 16px;
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -707,15 +847,27 @@ body {
   z-index: 1;
 }
 
-.pulse-ring.r2 { animation-delay: 1s; }
+.pulse-ring.r2 {
+  animation-delay: 1s;
+}
 
 @keyframes pulse-wave {
   0% { transform: scale(0.9); opacity: 0.8; }
   100% { transform: scale(1.6); opacity: 0; }
 }
 
-.live-title { font-size: 1.2rem; color: var(--gold-glow); margin-bottom: 4px; }
-.live-status { font-size: 0.85rem; color: #a855f7; margin-bottom: 16px; font-weight: 500; }
+.live-title {
+  font-size: 1.2rem;
+  color: var(--gold-glow);
+  margin-bottom: 4px;
+}
+
+.live-status {
+  font-size: 0.85rem;
+  color: #a855f7;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
 
 .voice-wave {
   display: flex;
@@ -771,13 +923,101 @@ body {
   gap: 8px;
 }
 
-.end-call-btn:hover { background: #dc2626; }
+.end-call-btn:hover {
+  background: #dc2626;
+}
 
-/* ================= RESPONSIVE MOBILE ================= */
+/* OPTIMISASI DENGAN MEDIA QUERY KHUSUS LAYAR HP (<= 768px) */
 @media (max-width: 768px) {
-  .app-container { flex-direction: column; }
-  .sidebar { width: 100%; height: auto; min-width: 100%; padding: 12px; }
-  .workspace-grid { grid-template-columns: 1fr; grid-template-rows: 1fr 280px; }
-  .main-content { padding: 8px; }
-  .profile-header-banner { flex-direction: column; text-align: center; }
+  body {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mobile-top-bar {
+    display: flex;
+  }
+  
+  .close-sidebar-mobile {
+    display: block;
+  }
+  
+  .app-container {
+    flex: 1;
+    flex-direction: column;
+    height: calc(100dvh - 56px);
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    z-index: 999;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.8);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .mobile-sidebar-overlay.active {
+    display: block;
+  }
+
+  .main-content {
+    padding: 8px;
+    height: 100%;
+    width: 100%;
+  }
+
+  .workspace-grid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .chat-wrapper {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  .canvas-wrapper {
+    display: none;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 56px);
+    z-index: 90;
+    border-radius: 0;
+  }
+
+  .canvas-wrapper.mobile-show {
+    display: flex;
+  }
+
+  .bubble {
+    max-width: 90%;
+    font-size: 0.88rem;
+  }
+
+  .chat-input-area {
+    padding: 8px 10px;
+  }
+
+  .chat-input-area input[type="text"] {
+    font-size: 0.88rem;
+    padding: 8px 12px;
+  }
+
+  .profile-header-banner {
+    flex-direction: column;
+    text-align: center;
+  }
 }
