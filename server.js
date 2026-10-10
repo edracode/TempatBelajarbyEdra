@@ -2,6 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import { GoogleGenAI } from '@google/genai';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -12,7 +17,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 app.use(express.json({ limit: '20mb' }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const AURELIA_SYSTEM_INSTRUCTION = `
 Nama Anda adalah Aurelia (Aurelia-G3), Asisten AI Belajar Utama di platform "TempatBelajar by Edra".
@@ -200,6 +206,10 @@ app.post('/api/chat', upload.single('file'), async (req, res) => {
     console.error('Error Server:', error);
     return res.status(500).json({ error: 'Aurelia mengalami gangguan koneksi.' });
   }
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
