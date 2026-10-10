@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>TempatBelajar by Edra - Platform EdTech AI</title>
   
   <link rel="stylesheet" href="style.css" />
@@ -14,13 +14,28 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
+
+  <!-- HEADER KHUSUS TAMPILAN SMARTPHONE / HP -->
+  <header class="mobile-top-bar">
+    <button id="mobileMenuBtn" class="mobile-icon-btn" aria-label="Buka Menu"><i class="fa-solid fa-bars"></i></button>
+    <div class="brand">
+      <div class="brand-icon">👑</div>
+      <h2>TempatBelajar <span>by Edra</span></h2>
+    </div>
+    <button id="mobileWhiteboardToggle" class="mobile-icon-btn" aria-label="Buka Whiteboard"><i class="fa-solid fa-pen-ruler"></i></button>
+  </header>
+
+  <!-- OVERLAY BACKGROUND DRAWER MENU HP -->
+  <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
   <div class="app-container">
     
-    <!-- SIDEBAR NAVIGASI & RIWAYAT -->
-    <aside class="sidebar">
+    <!-- SIDEBAR NAVIGASI UTAMA & RIWAYAT CHAT -->
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-icon">👑</div>
         <h2>TempatBelajar <span>by Edra</span></h2>
+        <button id="closeSidebarBtn" class="close-sidebar-mobile" aria-label="Tutup Menu"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <button class="new-chat-btn" id="newChatBtn">
@@ -31,9 +46,9 @@
         <i class="fa-solid fa-headset"></i> Mode Aurelia Live Voice
       </button>
 
-      <!-- USER & AURELIA AVATAR (BISA UPLOAD MANUALLY) -->
+      <!-- FOTO PROFIL AURELIA (DAPAT DI-UPLOAD MANUALLY) -->
       <div class="user-card">
-        <div class="avatar-badge" id="avatarBadgeContainer" title="Klik untuk ganti foto Aurelia">
+        <div class="avatar-badge" id="avatarBadgeContainer" title="Klik untuk mengganti foto profil Aurelia">
           <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" alt="Aurelia Avatar" id="aureliaAvatarImg" />
           <div class="avatar-overlay"><i class="fa-solid fa-camera"></i></div>
         </div>
@@ -60,10 +75,10 @@
       </div>
     </aside>
 
-    <!-- AREA UTAMA -->
+    <!-- AREA UTAMA APLIKASI -->
     <main class="main-content">
       
-      <!-- TAB CHAT & CANVAS -->
+      <!-- TAB CHAT UTAMA & WHITEBOARD -->
       <section class="tab-section active" id="chatTab">
         <div class="workspace-grid">
           
@@ -94,13 +109,13 @@
               </label>
               <input type="file" id="fileInput" accept="image/*,application/pdf" style="display: none;" />
               
-              <input type="text" id="userInput" placeholder="Tanyakan materi, buatkan gambar, atau upload file..." autocomplete="off" />
-              <button type="submit" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+              <input type="text" id="userInput" placeholder="Tanyakan materi, generate gambar, atau upload file..." autocomplete="off" />
+              <button type="submit" id="sendBtn" aria-label="Kirim Pesan"><i class="fa-solid fa-paper-plane"></i></button>
             </form>
           </div>
 
           <!-- WHITEBOARD CANVAS INTERAKTIF -->
-          <div class="canvas-wrapper">
+          <div class="canvas-wrapper" id="canvasWrapper">
             <header class="canvas-header">
               <h3><i class="fa-solid fa-pen-ruler"></i> Interactive Whiteboard</h3>
               <div class="canvas-tools">
@@ -118,13 +133,13 @@
         </div>
       </section>
 
-      <!-- TAB MODUL BELAJAR LENGKAP (TK - KULIAH) -->
+      <!-- TAB MODUL BELAJAR LENGKAP (TK HINGGA KULIAH) -->
       <section class="tab-section" id="modulTab">
         <div class="content-card">
           <h2>📚 Modul Pembelajaran Kompleks & Multi-Jenjang</h2>
           <p class="subtitle">Koleksi materi lengkap dari jenjang Dasar hingga Perguruan Tinggi.</p>
 
-          <!-- JENJANG TK / PAUD -->
+          <!-- JENJANG PAUD / TK -->
           <div class="modul-level-group">
             <h3><i class="fa-solid fa-shapes"></i> Jenjang PAUD & TK</h3>
             <div class="modul-grid">
@@ -246,7 +261,7 @@
         </div>
       </section>
 
-      <!-- TAB PROFIL EDRA (PENGGANTI KUIS INTERAKTIF) -->
+      <!-- TAB PROFIL MAESTRO EDRA -->
       <section class="tab-section" id="profilTab">
         <div class="content-card profile-card-wrapper">
           <div class="profile-header-banner">
@@ -299,10 +314,10 @@
     </main>
   </div>
 
-  <!-- OVERLAY AURELIA LIVE VOICE MODE -->
+  <!-- OVERLAY MODAL AURELIA LIVE VOICE MODE -->
   <div class="live-voice-overlay" id="liveVoiceOverlay">
     <div class="live-card">
-      <button class="close-live-btn" id="closeLiveBtn"><i class="fa-solid fa-xmark"></i></button>
+      <button class="close-live-btn" id="closeLiveBtn" aria-label="Tutup Obrolan Live"><i class="fa-solid fa-xmark"></i></button>
 
       <div class="live-avatar-wrapper">
         <div class="pulse-ring r1"></div>
